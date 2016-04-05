@@ -11,25 +11,50 @@
 <body>
 
 <div class="container">
-<div class="row">
-  <div class="col-md-6 col-sm-6">
-    <input type="text" id="pokemonId"/>
-    <input type="submit" value="Get Pokemon Info" id="pokemonSubmit"/>
+  <div class="jumbotron">
+	<div class="form-horizontal">
+	  <div class="form-group">
+	    <label for="pokemonId" class="col-sm-3 control-label">Pokemon</label>
+	    <div class="col-sm-9">
+	      <input type="number" class="form-control" id="pokemonId" placeholder="Pokemon ID">
+	    </div>
+	  </div>
+	  <div class="col-sm-offset-9">
+        <input type="submit" value="Get Pokemon Info" id="pokemonSubmit" class="btn btn-primary"/>
+      </div>
+    </div>
+  </div>
+</div>
 
+
+
+<div class="container">
+  <div class="jumbotron">
     <div>
       <img id="pokemonImg" class="img-circle" alt="" src="">
       <h3 id="pokemonName"></h3>
+      <div>
+        <h5>Moves</h5>
+        <ul id="pokemonMoves">
+          
+        </ul>
+      </div>
     </div>
   </div>
-  <div class="col-md-6 col-sm-6">
-content
+</div>
+<div class="container">
+  <div class="jumbotron">
+    <div>
+      <img id="opponentImg" class="img-circle" alt="" src="">
+      <h3 id="opponentName"></h3>
+    </div>
   </div>
-
 </div>
 
-</div>
+
+
 <!-- Scripts -->
-<script type="text/javascript" src="resources/bootstrap-3.3.6-dist/js/bootstrap.js"></script>
+<!-- <script type="text/javascript" src="resources/bootstrap-3.3.6-dist/js/bootstrap.js"></script> -->
 <script type="text/javascript" src="resources/js/my_script.js"></script>
 
 </body>
