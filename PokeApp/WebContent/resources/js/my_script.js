@@ -26,8 +26,8 @@ var pokemonDataSet = false;  //True iff pokemon data up to date
 var opponentDataSet = false; //True iff opponent data up to date
 
 function getPokemon() {
-	pokemonDataSet = false;
-	opponentDataSet = false;
+	
+	hideData();
 	
 	var base_url = "http://pokeapi.co/api/v2/pokemon/";
 
@@ -66,11 +66,15 @@ function setValuesBoth(){
 	if(!pokemonDataSet){
 		setValues(pokemonJsonData, pokemonName);
 		pokemonDataSet = true;
+		document.getElementById(pokemonName+"Data").style.display = "inherit";
+
 	}
 	
 	if(!opponentDataSet){
 		setValues(opponentJsonData, opponentName);
 		opponentDataSet = true;
+		document.getElementById(opponentName+"Data").style.display = "inherit";
+
 	}
 }
 
@@ -104,3 +108,16 @@ function setValues(pokeJsonData, name) {
 	}
 
 }
+
+
+function hideData(){
+
+	pokemonDataSet = false;
+	opponentDataSet = false;
+	
+	document.getElementById(pokemonName+"Data").style.display = "none";
+	document.getElementById(opponentName+"Data").style.display = "none";
+	
+}
+
+
