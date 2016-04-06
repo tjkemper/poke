@@ -248,7 +248,8 @@ function generateOpponentMove(){
 	//TODO: include probability
 	var moves = opponentJsonData.moves;
 	var randomMoveIndex = Math.floor(Math.random() * moves.length);
-	return moves[randomMoveIndex];
+	console.log(moves[randomMoveIndex]);
+	return moves[randomMoveIndex].move;
 }
 
 function selectPokemonMove(){
@@ -265,7 +266,7 @@ function selectPokemonMove(){
     		console.log("move is check");
     		for(var j = 0; j < moves.length; j++){
     			if(moves[j].move.name == cboxes[i].value){
-    				// call inflictDamage(move,pokemonName)
+    				inflictDamageFromMoveToName(moves[j].move, opponentName);
     				//break to stop early
     				break;
     			}
@@ -274,10 +275,11 @@ function selectPokemonMove(){
     		break;
     	}
     }
-    //call inflictDamage(generateOpponentMove(),opponentName)
+    inflictDamageFromMoveToName(generateOpponentMove(), pokemonName);
 }
 
 function inflictDamageFromMoveToName(move, name){
+	console.log(move);
 	var power = move.details.power;
 	//call jake's function passing power and name
 	deductHealth(name, power);
