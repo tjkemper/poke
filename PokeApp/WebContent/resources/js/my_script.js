@@ -77,6 +77,8 @@ function setValuesBoth(){
 		document.getElementById(pokemonName+"Data").style.display = "inherit";
 		var hpBar = document.getElementById("pokemonHpBar");
 		hpBar.style.width = "100%";
+		hpBar.className = "progress-bar progress-bar-success";
+
 
 	}
 	
@@ -86,6 +88,7 @@ function setValuesBoth(){
 		document.getElementById(opponentName+"Data").style.display = "inherit";
 		var hpBar = document.getElementById("opponentHpBar");
 		hpBar.style.width = "100%";
+		hpBar.className = "progress-bar progress-bar-success";
 
 	}
 }
@@ -287,6 +290,7 @@ function selectPokemonMove(){
 
 function inflictDamageFromMoveToName(move, name){
 	console.log(move);
+	//TODO: check if power is undefined
 	var power = move.details.power;
 	//call jake's function passing power and name
 	deductHealth(name, power);
