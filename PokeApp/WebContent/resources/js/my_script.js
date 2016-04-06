@@ -28,6 +28,10 @@ var opponentHealthStatus;
 var pokemonDataSet = false;  //True iff pokemon data up to date
 var opponentDataSet = false; //True iff opponent data up to date
 
+var battleStatus = {
+					turn : pokemonName //user starts first by default
+					};
+
 function getPokemon() {
 	
 	hideData();
@@ -204,6 +208,7 @@ function generateOpponentMove(){
 	var moves = opponentJsonData.moves;
 	var randomMoveIndex = Math.floor(Math.random() * moves.length);
 	return moves[randomMoveIndex];
-	
 }
+
+
 
