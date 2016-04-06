@@ -115,27 +115,40 @@ function setValues(pokeJsonData, name) {
 	
 	var movesArray = pokeJsonData.moves;
 	console.log(movesArray.length);
+	// Added counter to limit moves to first 4 found.
+	var moveToggleCounter = 0;
 	for (var i = 0; i < movesArray.length; i++) {
 		var versionGroupDetailsArray = movesArray[i].version_group_details;
 		var include = false;
 		for (var j = 0; j < versionGroupDetailsArray.length; j++) {
+			// Changed level_learned_at version to look at level 1.
 			if (versionGroupDetailsArray[j].version_group.name === "red-blue"
-					&& versionGroupDetailsArray[j].level_learned_at === 0) {
+					&& versionGroupDetailsArray[j].level_learned_at < 2) {
 				include = true;
 			}
 		}
 		if (include) {
-			
-			var promise = pullMoveDetails(movesArray[i].move);
-			
-			promise.then(function(result){
-				var move = document.createElement("li");
-				move.appendChild(document.createTextNode(result.name + " , " + result.details.power));
-				movesElement.appendChild(move);
-			},function(err){
-				console.log(err);
-			});
-
+			// Count to 4, resolve those, then exit to speed things up.
+			moveToggleCounter++;
+			if(moveToggleCounter<=4){
+				var promise = pullMoveDetails(movesArray[i].move);
+				
+				promise.then(function(result){
+					var move = document.createElement("li");
+					move.appendChild(document.createTextNode(result.name + " , " + result.details.power));
+					movesElement.appendChild(move);
+				},function(err){
+					console.log(err);
+				});
+			}else{
+				// Remove move from array to keep track of actives
+				movesArray.splice(i,1);
+				i--;
+			}
+		}else{
+			// Remove move from array to keep track of actives
+			movesArray.splice(i,1);
+			i--;
 		}
 	}
 
