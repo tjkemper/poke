@@ -136,6 +136,17 @@ function setValues(pokeJsonData, name) {
 				promise.then(function(result){
 					var move = document.createElement("li");
 					move.appendChild(document.createTextNode(result.name + " , " + result.details.power));
+					if(name!==opponentName){
+						var radioElement = document.createElement("input");
+					
+						radioElement.setAttribute("type","radio");
+						radioElement.setAttribute("name","pokemonMoveSelection");
+						radioElement.setAttribute("value", result.name);
+						if(moveToggleCounter==0){
+							radioElement.setAttribute("checked",true);
+						}
+						move.appendChild(radioElement);
+					}
 					movesElement.appendChild(move);
 				},function(err){
 					console.log(err);
