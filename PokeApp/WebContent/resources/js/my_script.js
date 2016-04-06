@@ -133,8 +133,8 @@ function setValues(pokeJsonData, name) {
 		}
 		if (include) {
 			// Count to 4, resolve those, then exit to speed things up.
-			moveToggleCounter++;
-			if(moveToggleCounter<=4){
+			
+			if(moveToggleCounter<4){
 				var promise = pullMoveDetails(movesArray[i].move);
 				
 				promise.then(function(result){
@@ -147,7 +147,7 @@ function setValues(pokeJsonData, name) {
 						radioElement.setAttribute("name","pokemonMoveSelection");
 						radioElement.setAttribute("value", result.name);
 						if(moveToggleCounter==0){
-							radioElement.setAttribute("checked",true);
+							radioElement.setAttribute("checked","checked");
 						}
 						move.appendChild(radioElement);
 					}
@@ -160,6 +160,7 @@ function setValues(pokeJsonData, name) {
 				movesArray.splice(i,1);
 				i--;
 			}
+			moveToggleCounter++;
 		}else{
 			// Remove move from array to keep track of actives
 			movesArray.splice(i,1);
@@ -210,5 +211,29 @@ function generateOpponentMove(){
 	return moves[randomMoveIndex];
 }
 
-
+function selectPokemonMove(){
+	var moves = pokemonJsonData.moves;
+	console.log('In move selection');
+    var cboxes = document.getElementsByName('pokemonMoveSelection');
+    console.log(cboxes);
+    var len = cboxes.length;
+    console.log(len);
+    for (var i=0; i<len; i++) {
+    	console.log("current checkbox " + i);
+    	console.log("current checkbox is " + cboxes[i].checked);
+    	if(cboxes[i].checked){
+    		console.log("move is check");
+    		for(var j = 0; j < moves.length; j++){
+    			if(moves[j].move.name == cboxes[i].value){
+    				// call inflictDamage(move,pokemonName)
+    				//break to stop early
+    				break;
+    			}
+    		}
+    		// break to stop early
+    		break;
+    	}
+    }
+    //call inflictDamage(generateOpponentMove(),opponentName)
+}
 
