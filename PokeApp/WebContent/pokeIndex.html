@@ -16,7 +16,7 @@
 	  <div class="form-group">
 	    <label for="selectedPokemonId" class="col-sm-3 control-label">Pokemon</label>
 	    <div class="col-sm-9">
-	      <input type="number" class="form-control" id="selectedPokemonId" placeholder="Pokemon ID">
+	      <input type="number" max="151" class="form-control" id="selectedPokemonId" placeholder="Pokemon ID">
 	    </div>
 	  </div>
 	  <div class="col-sm-offset-9">
@@ -27,11 +27,14 @@
 </div>
 
 
-
-<div id="pokemonData" class="container" style="display: none;">
+<div class="row">
+<div id="pokemonData" class="container col-sm-6" style="display: none;">
   <div class="jumbotron">
     <div>
       <img id="pokemonImg" class="img-circle" alt="" src="">
+	  <div class="progress">
+	    <div id="pokemonHpBar" class="progress-bar" style="width:100%"></div>
+	  </div>
       <h3 id="pokemonName"></h3>
       <div>
         <h5>Moves</h5>
@@ -42,10 +45,13 @@
     </div>
   </div>
 </div>
-<div id="opponentData" class="container" style="display: none;">
+<div id="opponentData" class="container col-sm-6" style="display: none;">
   <div class="jumbotron">
     <div>
       <img id="opponentImg" class="img-circle" alt="" src="">
+	  <div class="progress">
+	    <div id="opponentHpBar" class="progress-bar" style="width:100%"></div>
+	  </div>
       <h3 id="opponentName"></h3>
       <div>
         <h5>Moves</h5>
@@ -56,11 +62,12 @@
     </div>
   </div>
 </div>
-
+</div>
 
 
 <!-- Scripts -->
-<!-- <script type="text/javascript" src="resources/bootstrap-3.3.6-dist/js/bootstrap.js"></script> -->
+<script type="text/javascript" src="resources/js/jquery-2.2.3.min.js"></script>
+<script type="text/javascript" src="resources/bootstrap-3.3.6-dist/js/bootstrap.js"></script>
 <script type="text/javascript" src="resources/js/my_script.js"></script>
 
 </body>
