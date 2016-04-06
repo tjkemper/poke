@@ -9,6 +9,7 @@
  */
 window.onload = function() {
 	document.getElementById("pokemonSubmit").addEventListener("click", getPokemon);
+	
 }
 
 /*
@@ -210,5 +211,7 @@ function generateOpponentMove(){
 	return moves[randomMoveIndex];
 }
 
-
-
+function inflictDamageFromMove(move, name){
+	var power = move.details.power;
+	//call jake's function passing power and name
+}
