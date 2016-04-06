@@ -250,7 +250,8 @@ function generateOpponentMove(){
 	return moves[randomMoveIndex];
 }
 
-function inflictDamageFromMove(move, name){
+function inflictDamageFromMoveToName(move, name){
 	var power = move.details.power;
 	//call jake's function passing power and name
+	deductHealth(name, power);
 }
