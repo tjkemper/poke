@@ -106,13 +106,15 @@ function setValues(pokeJsonData, name) {
 		var statObj = statIndex.stat;
 		if(statObj.name == "hp"){
 			if(name == "pokemon"){
-				pokemonStatus.startHP = statIndex.base_stat;
-				pokemonStatus.currentHP = statIndex.base_stat;
+				var HP = statIndex.base_stat * 5;
+				pokemonStatus.startHP = HP;
+				pokemonStatus.currentHP = HP;
 				var hpElement = document.getElementById("pokemonHp");
 				hpElement.innerHTML = ""+pokemonStatus.startHP;
 			}else{
-				opponentStatus.startHP = statIndex.base_stat;
-				opponentStatus.currentHP = statIndex.base_stat;
+				var HP = statIndex.base_stat * 5;
+				opponentStatus.startHP = HP;
+				opponentStatus.currentHP = HP;
 				var hpElement = document.getElementById("opponentHp");
 				hpElement.innerHTML = ""+opponentStatus.startHP;
 			}
@@ -232,6 +234,7 @@ function deductHealth(pokeType, pointDeduction){
 	}else if(statPercentage >= 0 && statPercentage <= 15){
 		hpBar.className = "progress-bar progress-bar-danger";
 	}else if(statPercentage < 0){
+		hpBar.className = "progress-bar progress-bar-danger";
 		statPercentage = 0;
 		currentHP = 0;
 	}
