@@ -121,8 +121,9 @@ function setValues(pokeJsonData, name) {
 		var versionGroupDetailsArray = movesArray[i].version_group_details;
 		var include = false;
 		for (var j = 0; j < versionGroupDetailsArray.length; j++) {
+			// Changed level_learned_at version to look at level 1.
 			if (versionGroupDetailsArray[j].version_group.name === "red-blue"
-					&& versionGroupDetailsArray[j].level_learned_at === 0) {
+					&& versionGroupDetailsArray[j].level_learned_at < 2) {
 				include = true;
 			}
 		}
