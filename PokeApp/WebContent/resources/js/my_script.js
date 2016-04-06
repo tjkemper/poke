@@ -9,6 +9,7 @@
  */
 window.onload = function() {
 	document.getElementById("pokemonSubmit").addEventListener("click", getPokemon);
+	
 }
 
 /*
@@ -22,8 +23,8 @@ var opponentName = "opponent";// global, name of opponent
 var pokemonJsonData; //global, JSON for pokemon
 var opponentJsonData;//global, JSON for opponent
 
-var pokemonHealthStatus;
-var opponentHealthStatus;
+var pokemonStatus = {}; 	// full status of chosen pokemon
+var opponentStatus = {}; 	// full status of generated opponent
 
 var pokemonDataSet = false;  //True iff pokemon data up to date
 var opponentDataSet = false; //True iff opponent data up to date
@@ -105,13 +106,15 @@ function setValues(pokeJsonData, name) {
 		var statObj = statIndex.stat;
 		if(statObj.name == "hp"){
 			if(name == "pokemon"){
-				pokemonHealthStatus = statIndex.base_stat; 
+				pokemonStatus.startHP = statIndex.base_stat;
+				pokemonStatus.currentHP = statIndex.base_stat;
 				var hpElement = document.getElementById("pokemonHp");
-				hpElement.innerHTML = ""+pokemonHealthStatus;
+				hpElement.innerHTML = ""+pokemonStatus.startHP;
 			}else{
-				opponentHealthStatus = statIndex.base_stat;
+				opponentStatus.startHP = statIndex.base_stat;
+				opponentStatus.currentHP = statIndex.base_stat;
 				var hpElement = document.getElementById("opponentHp");
-				hpElement.innerHTML = ""+opponentHealthStatus;
+				hpElement.innerHTML = ""+opponentStatus.startHP;
 			}
 		}
 	}
@@ -204,6 +207,43 @@ function pullMoveDetails(move){
 	
 }
 
+/**
+ * fucntion to deduct the opposition's health points
+ * @param pokeType
+ * @param pointDeduction
+ */
+function deductHealth(pokeType, pointDeduction){
+	var statPercentage = 0;
+	var currentHP = 0;
+	var startingHP = 0;
+	if(pokeType == pokemonName){
+		currentHP = pokemonStatus.currentHP - pointDeduction;
+		startingHP = pokemonStatus.startHP;
+	}else{
+		currentHP = opponentStatus.currentHP - pointDeduction;
+		startingHP = opponentStatus.startHP;
+	}
+	statPercentage = (currentHP / startingHP) * 100;
+	statPercentage = Math.floor(statPercentage);
+	var hpElement = document.getElementById(pokeType+"Hp");
+	var hpBar = document.getElementById(pokeType+"HpBar");
+	if(statPercentage > 15 && statPercentage <= 40 ){
+		hpBar.className = "progress-bar progress-bar-warning";
+	}else if(statPercentage >= 0 && statPercentage <= 15){
+		hpBar.className = "progress-bar progress-bar-danger";
+	}else if(statPercentage < 0){
+		statPercentage = 0;
+		currentHP = 0;
+	}
+	if(pokeType == pokemonName){
+		pokemonStatus.currentHP = currentHP;
+	}else{
+		opponentStatus.currentHP = currentHP;
+	}
+	hpBar.style.width = statPercentage+"%";
+	hpElement.innerHTML = ""+currentHP;
+}
+
 function generateOpponentMove(){
 	//TODO: include probability
 	var moves = opponentJsonData.moves;
@@ -237,3 +277,8 @@ function selectPokemonMove(){
     //call inflictDamage(generateOpponentMove(),opponentName)
 }
 
+function inflictDamageFromMoveToName(move, name){
+	var power = move.details.power;
+	//call jake's function passing power and name
+	deductHealth(name, power);
+}
