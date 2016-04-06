@@ -175,3 +175,11 @@ function pullMoveDetails(move){
 	
 }
 
+function generateOpponentMove(){
+	//TODO: include probability
+	var moves = opponentJsonData.moves;
+	var randomMoveIndex = Math.floor(Math.random() * moves.length);
+	return moves[randomMoveIndex];
+	
+}
+
