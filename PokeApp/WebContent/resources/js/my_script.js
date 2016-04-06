@@ -100,9 +100,16 @@ function setValues(pokeJsonData, name) {
 			}
 		}
 		if (include) {
-			var move = document.createElement("li");
-			move.appendChild(document.createTextNode(movesArray[i].move.name));
-			movesElement.appendChild(move);
+			
+			var promise = pullMoveDetails(movesArray[i].move);
+			
+			promise.then(function(result){
+				var move = document.createElement("li");
+				move.appendChild(document.createTextNode(result.name + " , " + result.details.power));
+				movesElement.appendChild(move);
+			},function(err){
+				console.log(err);
+			});
 
 		}
 	}
@@ -120,4 +127,26 @@ function hideData(){
 	
 }
 
+// Get details for a move.
+function pullMoveDetails(move){
+	
+	var promise =new Promise( function(resolve,reject){
+		var xhttp = new XMLHttpRequest();
+		xhttp.open("GET", move.url, true);
+		xhttp.onload = function(){
+			if(xhttp.status === 200){
+				var jsonData = JSON.parse(xhttp.responseText);
+				move.details = jsonData
+				return resolve(move);
+				
+			}else{
+				return reject("Error");
+			}
+		}
+		xhttp.send();
+	});
+	
+	return promise;
+	
+}
 
