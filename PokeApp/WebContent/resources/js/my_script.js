@@ -22,6 +22,9 @@ var opponentName = "opponent";// global, name of opponent
 var pokemonJsonData; //global, JSON for pokemon
 var opponentJsonData;//global, JSON for opponent
 
+var pokemonHealthStatus;
+var opponentHealthStatus;
+
 var pokemonDataSet = false;  //True iff pokemon data up to date
 var opponentDataSet = false; //True iff opponent data up to date
 
@@ -88,6 +91,28 @@ function setValues(pokeJsonData, name) {
 	var movesElement = document.getElementById(name + "Moves");
 	movesElement.innerHTML = ""; //reset so it doesn't add on to UL
 
+	/**
+	 * pulling Health Points from JSON data
+	 */
+	var stats = pokeJsonData.stats;
+	console.log(stats.length);
+	for(var i = 0; i < stats.length; i++){
+		var statIndex = stats[i];
+		var statObj = statIndex.stat;
+		if(statObj.name == "hp"){
+			if(name == "pokemon"){
+				pokemonHealthStatus = statIndex.base_stat; 
+				var hpElement = document.getElementById("pokemonHp");
+				hpElement.innerHTML = ""+pokemonHealthStatus;
+			}else{
+				opponentHealthStatus = statIndex.base_stat;
+				var hpElement = document.getElementById("opponentHp");
+				hpElement.innerHTML = ""+opponentHealthStatus;
+			}
+		}
+	}
+	
+	
 	var movesArray = pokeJsonData.moves;
 	console.log(movesArray.length);
 	for (var i = 0; i < movesArray.length; i++) {
