@@ -75,6 +75,8 @@ function setValuesBoth(){
 		setValues(pokemonJsonData, pokemonName);
 		pokemonDataSet = true;
 		document.getElementById(pokemonName+"Data").style.display = "inherit";
+		var hpBar = document.getElementById("pokemonHpBar");
+		hpBar.style.width = "100%";
 
 	}
 	
@@ -82,6 +84,8 @@ function setValuesBoth(){
 		setValues(opponentJsonData, opponentName);
 		opponentDataSet = true;
 		document.getElementById(opponentName+"Data").style.display = "inherit";
+		var hpBar = document.getElementById("opponentHpBar");
+		hpBar.style.width = "100%";
 
 	}
 }
