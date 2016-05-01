@@ -79,6 +79,11 @@ var POKE = {
 			hpBar.style.width = "100%";
 			hpBar.className = "progress-bar progress-bar-success";
 		}
+		if(POKE.pokemonDataSet && POKE.opponentDataSet){
+			var audio = new Audio('resources/mp3/battle-vs-wild-pokemon.mp3');
+			audio.loop = true;
+			audio.play();
+		}
 	},
   setValues : function (pokeJsonData, name) {
 
