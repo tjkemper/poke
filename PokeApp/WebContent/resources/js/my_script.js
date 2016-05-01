@@ -25,7 +25,11 @@ var POKE = {
   opponentDataSet : false, 		// True iff opponent data up to date
   battleStatus : {
 			turn : "pokemon" 	//user starts first by default
-			},  
+			},
+  audio  : {
+	  battle  : new Audio('resources/mp3/battle-vs-wild-pokemon.mp3'),
+	  victory : new Audio('resources/mp3/victory-vs-wild-pokemon.mp3')
+  },
   getPokemon : function() {
 		
 		POKE.hideData();
@@ -80,9 +84,8 @@ var POKE = {
 			hpBar.className = "progress-bar progress-bar-success";
 		}
 		if(POKE.pokemonDataSet && POKE.opponentDataSet){
-			var audio = new Audio('resources/mp3/battle-vs-wild-pokemon.mp3');
-			audio.loop = true;
-			audio.play();
+			
+			POKE.audio.battle.play();
 		}
 	},
   setValues : function (pokeJsonData, name) {
@@ -299,6 +302,8 @@ var POKE = {
 
 };
 
+POKE.audio.battle.loop = true;
+POKE.audio.victory.loop = true;
 
 document.getElementById("pokemonSubmit").addEventListener("click", POKE.getPokemon);
 document.getElementById("pokemonSelectMoveBtn").addEventListener("click", POKE.selectPokemonMove);
