@@ -1,7 +1,7 @@
 /**
  * Send AJAX request to the RESTful Pokemon API
  * 
- * @author Taylor Kemper
+ * @author Taylor Kemper, Jacob Eanes, Jeffrey Goyette
  */
 
 /*
