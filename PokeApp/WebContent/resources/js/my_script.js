@@ -31,6 +31,12 @@ var POKE = {
 	  victory : new Audio('resources/mp3/victory-vs-wild-pokemon.mp3')
   },
   getPokemon : function() {
+	  
+	    document.getElementById("selectPokemonDiv").style.display = "none";
+		document.getElementById("battleBanner").style.display = "block";
+		var battleBannerAlert = document.getElementById("battleBannerAlert");
+		battleBannerAlert.className = "alert alert-warning";
+		battleBannerAlert.innerHTML = "Time to battle!";
 		
 		POKE.hideData();
 		
@@ -214,11 +220,11 @@ var POKE = {
 	   * @param pokeType
 	   * @param pointDeduction
 	   */
-	  function (pokeType, pointDeduction){
+	  function (name, pointDeduction){
 	  	var statPercentage = 0;
 	  	var currentHP = 0;
 	  	var startingHP = 0;
-	  	if(pokeType == pokemonName){
+	  	if(name == POKE.pokemonName){
 	  		currentHP = POKE.pokemonStatus.currentHP - pointDeduction;
 	  		startingHP = POKE.pokemonStatus.startHP;
 	  	}else{
@@ -227,8 +233,8 @@ var POKE = {
 	  	}
 	  	statPercentage = (currentHP / startingHP) * 100;
 	  	statPercentage = Math.floor(statPercentage);
-	  	var hpElement = document.getElementById(pokeType+"Hp");
-	  	var hpBar = document.getElementById(pokeType+"HpBar");
+	  	var hpElement = document.getElementById(name+"Hp");
+	  	var hpBar = document.getElementById(name+"HpBar");
 	  	if(statPercentage > 15 && statPercentage <= 40 ){
 	  		hpBar.className = "progress-bar progress-bar-warning";
 	  	}else if(statPercentage >= 0 && statPercentage <= 15){
@@ -238,7 +244,7 @@ var POKE = {
 	  		statPercentage = 0;
 	  		currentHP = 0;
 	  	}
-	  	if(pokeType == pokemonName){
+	  	if(name == POKE.pokemonName){
 	  		POKE.pokemonStatus.currentHP = currentHP;
 	  	}else{
 	  		POKE.opponentStatus.currentHP = currentHP;
@@ -301,11 +307,9 @@ var POKE = {
 	},
   inflictDamageFromMoveToName : function (move, name){
 		console.log(move);
-		//TODO: check if power is undefined
-		var power = move.details.power;
+		var power = move.details.power || 0;
 		//call jake's function passing power and name
 		POKE.deductHealth(name, power);
-		//TODO: check if fainted
 	},
   setToFront : function(name){
 	  var imgElement = document.getElementById(name + "Img");	  
@@ -332,21 +336,25 @@ var POKE = {
 	  var winnerName;
 	  var loserName;
 	  var newClassName;
+	  var faintedDiv;
+	  
 	  if(POKE.opponentStatus.currentHP <= 0){
 		  winnerName = POKE.pokemonJsonData.name;
 		  loserName = POKE.opponentJsonData.name;
 		  newClassName = "alert alert-success";
+		  faintedDiv = "opponentData";
 	  }else {
 		  winnerName = POKE.opponentJsonData.name;
 		  loserName = POKE.pokemonJsonData.name;
 		  newClassName = "alert alert-danger";
+		  faintedDiv = "pokemonData";
 	  }
 	  battleBannerAlert.className = newClassName;
 	  battleBannerAlert.innerHTML = winnerName + " has defeated " + loserName;
+	  document.getElementById(faintedDiv).style.opacity = 0.5;
+	  
 	  
 	  document.getElementById("pokemonSelectMoveBtn").disabled = "disabled";
-	  
-	  document.getElementById("battleBanner").style.display = "block";
 	  
   },
   flipPictureInterval : setInterval(function(){
