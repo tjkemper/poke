@@ -152,7 +152,18 @@ var POKE = {
 					
 					promise.then(function(result){
 						var move = document.createElement("li");
-						move.appendChild(document.createTextNode(result.name + " , " + result.details.power));
+//						move.appendChild(document.createTextNode("<span class=\"label label-info\">"+result.name + "<span> , <span class=\"badge\">" + (result.details.power||0) +"</span>"));
+						
+						var moveName = document.createElement("span");
+						moveName.setAttribute("class", "label label-info");
+						moveName.appendChild(document.createTextNode(result.name));
+						move.appendChild(moveName);
+						
+						var movePower = document.createElement("span");
+						movePower.setAttribute("class", "badge");
+						movePower.appendChild(document.createTextNode(result.details.power||0));
+						move.appendChild(movePower);
+						
 						if(name!=POKE.opponentName){
 							var radioElement = document.createElement("input");
 						
