@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<div class="container">
+<div id="selectPokemonDiv" class="container">
   <div class="jumbotron">
 	<div class="form-horizontal">
 	  <div class="form-group">
@@ -26,6 +26,14 @@
   </div>
 </div>
 
+<div id="battleBanner" class="container">
+  <div class="jumbotron">
+    <div id="battleBannerAlert">
+      
+    </div>
+  </div>
+</div>
+
 
 <div class="row">
 <div id="pokemonData" class="container col-sm-6" style="display: none;">
@@ -35,7 +43,7 @@
 	  <div class="progress">
 	    <div id="pokemonHpBar" class="progress-bar progress-bar-success" style="width:100%"></div>
 	  </div>
-      <img id="pokemonImg" class="img-circle" alt="" src="">&nbsp;Health: <span id="pokemonHp"></span>&nbsp;&nbsp;&nbsp;<button onclick="deductHealth('pokemon', 30)" >POW</button>
+      <img id="pokemonImg" class="img-circle" alt="" src="">Health: <span id="pokemonHp"></span>
       <h3 id="pokemonName"></h3>
       <div>
         <h5>Moves</h5>
@@ -54,7 +62,7 @@
 	  <div class="progress">
 	    <div id="opponentHpBar" class="progress-bar progress-bar-success" style="width:100%"></div>
 	  </div>
-      <img id="opponentImg" class="img-circle" alt="" src="">&nbsp;Health: <span id="opponentHp"></span> &nbsp;&nbsp;&nbsp;<button onclick="deductHealth('opponent', 45)" >POW</button>
+      <img id="opponentImg" class="img-circle" alt="" src="">Health: <span id="opponentHp"></span>
       <h3 id="opponentName"></h3>
       <div>
         <h5>Moves</h5>
