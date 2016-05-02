@@ -147,7 +147,7 @@ var POKE = {
 					promise.then(function(result){
 						var move = document.createElement("li");
 						move.appendChild(document.createTextNode(result.name + " , " + result.details.power));
-						if(name!==opponentName){
+						if(name!=POKE.opponentName){
 							var radioElement = document.createElement("input");
 						
 							radioElement.setAttribute("type","radio");
@@ -254,37 +254,49 @@ var POKE = {
 		return moves[randomMoveIndex].move;
 	},
   selectPokemonMove : function (){
-		var moves = POKE.pokemonJsonData.moves;
-		console.log('In move selection');
-	    var cboxes = document.getElementsByName('pokemonMoveSelection');
-	    console.log(cboxes);
-	    var len = cboxes.length;
-	    console.log(len);
-	    for (var i=0; i<len; i++) {
-	    	console.log("current checkbox " + i);
-	    	console.log("current checkbox is " + cboxes[i].checked);
-	    	if(cboxes[i].checked){
-	    		console.log("move is check");
-	    		for(var j = 0; j < moves.length; j++){
-	    			if(moves[j].move.name == cboxes[i].value){
-	    				POKE.inflictDamageFromMoveToName(moves[j].move, POKE.opponentName);
-	    				//break to stop early
-	    				break;
-	    			}
-	    		}
-	    		// break to stop early
-	    		break;
-	    	}
+	    
+	    if(POKE.battleStatus.turn == "pokemon"){
+			var moves = POKE.pokemonJsonData.moves;
+			console.log('In move selection');
+		    var cboxes = document.getElementsByName('pokemonMoveSelection');
+		    console.log(cboxes);
+		    var len = cboxes.length;
+		    console.log(len);
+		    for (var i=0; i<len; i++) {
+		    	console.log("current checkbox " + i);
+		    	console.log("current checkbox is " + cboxes[i].checked);
+		    	if(cboxes[i].checked){
+		    		console.log("move is check");
+		    		for(var j = 0; j < moves.length; j++){
+		    			if(moves[j].move.name == cboxes[i].value){
+		    				POKE.inflictDamageFromMoveToName(moves[j].move, POKE.opponentName);
+		    				//break to stop early
+		    				break;
+		    			}
+		    		}
+		    		// break to stop early
+		    		break;
+		    	}
+		    }
+		    POKE.setToFront(POKE.pokemonName);
+		    if(POKE.isGameOver()){
+		    	POKE.endGame();
+		    }else {
+			    POKE.battleStatus.turn = POKE.opponentName;
+			    
+			    setTimeout(function(){
+			    		     POKE.inflictDamageFromMoveToName(POKE.generateOpponentMove(), POKE.pokemonName)
+			    			 POKE.setToFront(POKE.opponentName);
+			    		     
+			    		     if(POKE.isGameOver()){
+			    		    	 POKE.endGame();
+			    		     }else{
+			    		    	 POKE.battleStatus.turn = POKE.pokemonName;
+			    		     }
+			    		   },
+			    		   3000);
+		    }
 	    }
-	    POKE.battleStatus.turn = POKE.opponentName;
-	    POKE.setToFront(POKE.pokemonName);
-	    setTimeout(function(){
-	    		     POKE.inflictDamageFromMoveToName(POKE.generateOpponentMove(), POKE.pokemonName)
-	    			 POKE.battleStatus.turn = POKE.pokemonName;
-	    		     POKE.setToFront(POKE.opponentName);
-
-	    		   },
-	    		   3000);
 	    
 	},
   inflictDamageFromMoveToName : function (move, name){
@@ -298,41 +310,82 @@ var POKE = {
   setToFront : function(name){
 	  var imgElement = document.getElementById(name + "Img");	  
 	  imgElement.setAttribute("src", POKE[name+"JsonData"].sprites.front_default);
-  }
+  },
+  isGameOver : function(){
+	  if(POKE.pokemonStatus.currentHP <= 0){
+		  return true;
+	  }
+	  if(POKE.opponentStatus.currentHP <= 0){
+		  return true;
+	  }
+	  return false;
+	  
+  },
+  endGame : function(){
+	  
+	  clearInterval(POKE.flipPictureInterval);
+	  
+	  POKE.audio.battle.pause();
+	  POKE.audio.victory.play();
+	  
+	  var battleBannerAlert = document.getElementById("battleBannerAlert");
+	  var winnerName;
+	  var loserName;
+	  var newClassName;
+	  if(POKE.opponentStatus.currentHP <= 0){
+		  winnerName = POKE.pokemonJsonData.name;
+		  loserName = POKE.opponentJsonData.name;
+		  newClassName = "alert alert-success";
+	  }else {
+		  winnerName = POKE.opponentJsonData.name;
+		  loserName = POKE.pokemonJsonData.name;
+		  newClassName = "alert alert-danger";
+	  }
+	  battleBannerAlert.className = newClassName;
+	  battleBannerAlert.innerHTML = winnerName + " has defeated " + loserName;
+	  
+	  document.getElementById("pokemonSelectMoveBtn").disabled = "disabled";
+	  
+	  document.getElementById("battleBanner").style.display = "block";
+	  
+  },
+  flipPictureInterval : setInterval(function(){
+		console.log("HERE - " + POKE.battleStatus.turn);
+		if(POKE.pokemonDataSet &&  POKE.battleStatus.turn === POKE.pokemonName){
+			var imgElement = document.getElementById(POKE.pokemonName + "Img");
+			
+			if(imgElement.getAttribute("src") == POKE.pokemonJsonData.sprites.front_default){
+				imgElement.setAttribute("src", POKE.pokemonJsonData.sprites.back_default);
+			}else {
+				imgElement.setAttribute("src", POKE.pokemonJsonData.sprites.front_default);
+			}
+			
+			
+			
+		}else if(POKE.opponentDataSet && POKE.battleStatus.turn === POKE.opponentName){
+			var imgElement = document.getElementById(POKE.opponentName + "Img");
+			
+			if(imgElement.getAttribute("src") == POKE.opponentJsonData.sprites.front_default){
+				imgElement.setAttribute("src", POKE.opponentJsonData.sprites.back_default);
+			}else {
+				imgElement.setAttribute("src", POKE.opponentJsonData.sprites.front_default);
+			}
+			
+			
+		}
+	}, 500),
+	init : function(){
+		POKE.audio.battle.loop = true;
+//		POKE.audio.victory.loop = true;
+
+		document.getElementById("pokemonSubmit").addEventListener("click", POKE.getPokemon);
+		document.getElementById("pokemonSelectMoveBtn").addEventListener("click", POKE.selectPokemonMove);
+	}
 
 };
 
-POKE.audio.battle.loop = true;
-POKE.audio.victory.loop = true;
+POKE.init();
 
-document.getElementById("pokemonSubmit").addEventListener("click", POKE.getPokemon);
-document.getElementById("pokemonSelectMoveBtn").addEventListener("click", POKE.selectPokemonMove);
-
-setInterval(function(){
-	console.log("HERE - " + POKE.battleStatus.turn);
-	if(POKE.pokemonDataSet &&  POKE.battleStatus.turn === POKE.pokemonName){
-		var imgElement = document.getElementById(POKE.pokemonName + "Img");
-		
-		if(imgElement.getAttribute("src") == POKE.pokemonJsonData.sprites.front_default){
-			imgElement.setAttribute("src", POKE.pokemonJsonData.sprites.back_default);
-		}else {
-			imgElement.setAttribute("src", POKE.pokemonJsonData.sprites.front_default);
-		}
-		
-		
-		
-	}else if(POKE.opponentDataSet && POKE.battleStatus.turn === POKE.opponentName){
-		var imgElement = document.getElementById(POKE.opponentName + "Img");
-		
-		if(imgElement.getAttribute("src") == POKE.opponentJsonData.sprites.front_default){
-			imgElement.setAttribute("src", POKE.opponentJsonData.sprites.back_default);
-		}else {
-			imgElement.setAttribute("src", POKE.opponentJsonData.sprites.front_default);
-		}
-		
-		
-	}
-}, 500);
 
 
 
