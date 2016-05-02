@@ -321,6 +321,14 @@ var POKE = {
 		var power = move.details.power || 0;
 		//call jake's function passing power and name
 		POKE.deductHealth(name, power);
+		
+		var thisName   = (name == POKE.pokemonName) ? POKE.pokemonJsonData.name : POKE.opponentJsonData.name;
+		var otherName  = (name == POKE.pokemonName) ? POKE.opponentJsonData.name : POKE.pokemonJsonData.name;
+		var battleBannerAlert = document.getElementById("battleBannerAlert");
+		battleBannerAlert.className = (name == POKE.pokemonName) ? "alert alert-danger" : "alert alert-success";
+		
+		battleBannerAlert.innerHTML = otherName + " has inflicted " + power + " damange on " + thisName;
+		
 	},
   setToFront : function(name){
 	  var imgElement = document.getElementById(name + "Img");	  
