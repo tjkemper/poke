@@ -319,9 +319,20 @@ var POKE = {
   inflictDamageFromMoveToName : function (move, name){
 		console.log(move);
 		var power = move.details.power || 0;
-		//call jake's function passing power and name
 		POKE.deductHealth(name, power);
+		POKE.updateBattleBannerAlert(move, power, name);
 	},
+  updateBattleBannerAlert : function(move, power, name){
+	  var battleBannerAlert = document.getElementById("battleBannerAlert");
+	  var toName   = name == POKE.pokemonName ? POKE.pokemonJsonData.name  : POKE.opponentJsonData.name;
+	  var fromName = name == POKE.pokemonName ? POKE.opponentJsonData.name : POKE.pokemonJsonData.name;
+	  var className = name == POKE.pokemonName ? "alert alert-danger" : "alert alert-success";
+	  var text = fromName + " used " + move.name + " and inflicted " + power + " damage to " + toName;
+	  
+	  battleBannerAlert.className = className;
+	  battleBannerAlert.innerHTML = text;
+		
+  },
   setToFront : function(name){
 	  var imgElement = document.getElementById(name + "Img");	  
 	  imgElement.setAttribute("src", POKE[name+"JsonData"].sprites.front_default);
