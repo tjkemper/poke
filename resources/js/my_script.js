@@ -40,7 +40,7 @@ var POKE = {
 		
 		POKE.hideData();
 		
-		var base_url = "http://pokeapi.co/api/v2/pokemon/";
+		var base_url = "//pokeapi.co/api/v2/pokemon/";
 
 		var pokemonId = document.getElementById("selectedPokemonId").value;
 		
