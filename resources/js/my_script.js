@@ -1,6 +1,6 @@
 /**
  * Send AJAX request to the RESTful Pokemon API
- * 
+ *
  * @author Taylor Kemper, Jacob Eanes, Jeffrey Goyette
  */
 
@@ -31,21 +31,20 @@ var POKE = {
 	  victory : new Audio('resources/mp3/victory-vs-wild-pokemon.mp3')
   },
   getPokemon : function() {
-	  
-	    document.getElementById("selectPokemonDiv").style.display = "none";
+
+	  document.getElementById("selectPokemonDiv").style.display = "none";
 		document.getElementById("battleBanner").style.display = "block";
 		var battleBannerAlert = document.getElementById("battleBannerAlert");
 		battleBannerAlert.className = "alert alert-warning";
 		battleBannerAlert.innerHTML = "Time to battle!";
-		
+
 		POKE.hideData();
-		
+
 		var base_url = "//pokeapi.co/api/v2/pokemon/";
 
 		var pokemonId = document.getElementById("selectedPokemonId").value;
-		
-		POKE.sendRequest(base_url + pokemonId, POKE.pokemonName);
 
+		POKE.sendRequest(base_url + pokemonId, POKE.pokemonName);
 
 		var randomOpponentId = Math.floor(Math.random() * POKE.maxNumPokemon) + 1;
 
@@ -57,15 +56,15 @@ var POKE = {
 		xhttp.onreadystatechange = function() {
 			if (xhttp.readyState == 4 && xhttp.status == 200) {
 				var jsonData = JSON.parse(xhttp.responseText);
-			
+
 				if(name === POKE.pokemonName){
 					POKE.pokemonJsonData = jsonData;
 				}else if(name === POKE.opponentName){
 					POKE.opponentJsonData = jsonData;
 				}
-				
+
 				POKE.setValuesBoth();
-				
+
 			}
 		};
 		xhttp.open("GET", url, true);
@@ -80,7 +79,7 @@ var POKE = {
 			hpBar.style.width = "100%";
 			hpBar.className = "progress-bar progress-bar-success";
 		}
-		
+
 		if(!POKE.opponentDataSet){
 			POKE.setValues(POKE.opponentJsonData, POKE.opponentName);
 			POKE.opponentDataSet = true;
@@ -90,7 +89,7 @@ var POKE = {
 			hpBar.className = "progress-bar progress-bar-success";
 		}
 		if(POKE.pokemonDataSet && POKE.opponentDataSet){
-			
+
 			POKE.audio.battle.play();
 		}
 	},
@@ -128,8 +127,7 @@ var POKE = {
 				}
 			}
 		}
-		
-		
+
 		var movesArray = pokeJsonData.moves;
 		console.log(movesArray.length);
 		// Added counter to limit moves to first 4 found.
@@ -146,27 +144,26 @@ var POKE = {
 			}
 			if (include) {
 				// Count to 4, resolve those, then exit to speed things up.
-				
+
 				if(moveToggleCounter<4){
 					var promise = POKE.pullMoveDetails(movesArray[i].move);
-					
+
 					promise.then(function(result){
 						var move = document.createElement("li");
-//						move.appendChild(document.createTextNode("<span class=\"label label-info\">"+result.name + "<span> , <span class=\"badge\">" + (result.details.power||0) +"</span>"));
-						
+
 						var moveName = document.createElement("span");
 						moveName.setAttribute("class", "label label-info");
 						moveName.appendChild(document.createTextNode(result.name));
 						move.appendChild(moveName);
-						
+
 						var movePower = document.createElement("span");
 						movePower.setAttribute("class", "badge");
 						movePower.appendChild(document.createTextNode(result.details.power||0));
 						move.appendChild(movePower);
-						
+
 						if(name!=POKE.opponentName){
 							var radioElement = document.createElement("input");
-						
+
 							radioElement.setAttribute("type","radio");
 							radioElement.setAttribute("name","pokemonMoveSelection");
 							radioElement.setAttribute("value", result.name);
@@ -197,15 +194,15 @@ var POKE = {
 
 	  POKE.pokemonDataSet = false;
 	  POKE.opponentDataSet = false;
-		
+
 		document.getElementById(POKE.pokemonName+"Data").style.display = "none";
 		document.getElementById(POKE.opponentName+"Data").style.display = "none";
-		
+
 	},
-  pullMoveDetails : 
+  pullMoveDetails :
 	  // Get details for a move.
 	  function (move){
-		
+
 		var promise =new Promise( function(resolve,reject){
 			var xhttp = new XMLHttpRequest();
 			xhttp.open("GET", move.url, true);
@@ -214,20 +211,20 @@ var POKE = {
 					var jsonData = JSON.parse(xhttp.responseText);
 					move.details = jsonData
 					return resolve(move);
-					
+
 				}else{
 					return reject("Error");
 				}
 			}
 			xhttp.send();
 		});
-		
+
 		return promise;
-		
+
 	},
-  deductHealth : 
+  deductHealth :
 	  /**
-	   * fucntion to deduct the opposition's health points
+	   * function to deduct the opposition's health points
 	   * @param pokeType
 	   * @param pointDeduction
 	   */
@@ -271,7 +268,7 @@ var POKE = {
 		return moves[randomMoveIndex].move;
 	},
   selectPokemonMove : function (){
-	    
+
 	    if(POKE.battleStatus.turn == "pokemon"){
 			var moves = POKE.pokemonJsonData.moves;
 			console.log('In move selection');
@@ -300,11 +297,11 @@ var POKE = {
 		    	POKE.endGame();
 		    }else {
 			    POKE.battleStatus.turn = POKE.opponentName;
-			    
+
 			    setTimeout(function(){
 			    		     POKE.inflictDamageFromMoveToName(POKE.generateOpponentMove(), POKE.pokemonName)
 			    			 POKE.setToFront(POKE.opponentName);
-			    		     
+
 			    		     if(POKE.isGameOver()){
 			    		    	 POKE.endGame();
 			    		     }else{
@@ -314,7 +311,7 @@ var POKE = {
 			    		   3000);
 		    }
 	    }
-	    
+
 	},
   inflictDamageFromMoveToName : function (move, name){
 		console.log(move);
@@ -328,13 +325,13 @@ var POKE = {
 	  var fromName = name == POKE.pokemonName ? POKE.opponentJsonData.name : POKE.pokemonJsonData.name;
 	  var className = name == POKE.pokemonName ? "alert alert-danger" : "alert alert-success";
 	  var text = fromName + " used " + move.name + " and inflicted " + power + " damage to " + toName;
-	  
+
 	  battleBannerAlert.className = className;
 	  battleBannerAlert.innerHTML = text;
-		
+
   },
   setToFront : function(name){
-	  var imgElement = document.getElementById(name + "Img");	  
+	  var imgElement = document.getElementById(name + "Img");
 	  imgElement.setAttribute("src", POKE[name+"JsonData"].sprites.front_default);
   },
   isGameOver : function(){
@@ -345,21 +342,21 @@ var POKE = {
 		  return true;
 	  }
 	  return false;
-	  
+
   },
   endGame : function(){
-	  
+
 	  clearInterval(POKE.flipPictureInterval);
-	  
+
 	  POKE.audio.battle.pause();
 	  POKE.audio.victory.play();
-	  
+
 	  var battleBannerAlert = document.getElementById("battleBannerAlert");
 	  var winnerName;
 	  var loserName;
 	  var newClassName;
 	  var faintedDiv;
-	  
+
 	  if(POKE.opponentStatus.currentHP <= 0){
 		  winnerName = POKE.pokemonJsonData.name;
 		  loserName = POKE.opponentJsonData.name;
@@ -374,39 +371,37 @@ var POKE = {
 	  battleBannerAlert.className = newClassName;
 	  battleBannerAlert.innerHTML = winnerName + " has defeated " + loserName;
 	  document.getElementById(faintedDiv).style.opacity = 0.5;
-	  
-	  
+
 	  document.getElementById("pokemonSelectMoveBtn").disabled = "disabled";
-	  
+
   },
   flipPictureInterval : setInterval(function(){
 		console.log("HERE - " + POKE.battleStatus.turn);
 		if(POKE.pokemonDataSet &&  POKE.battleStatus.turn === POKE.pokemonName){
 			var imgElement = document.getElementById(POKE.pokemonName + "Img");
-			
+
 			if(imgElement.getAttribute("src") == POKE.pokemonJsonData.sprites.front_default){
 				imgElement.setAttribute("src", POKE.pokemonJsonData.sprites.back_default);
 			}else {
 				imgElement.setAttribute("src", POKE.pokemonJsonData.sprites.front_default);
 			}
-			
-			
-			
+
+
+
 		}else if(POKE.opponentDataSet && POKE.battleStatus.turn === POKE.opponentName){
 			var imgElement = document.getElementById(POKE.opponentName + "Img");
-			
+
 			if(imgElement.getAttribute("src") == POKE.opponentJsonData.sprites.front_default){
 				imgElement.setAttribute("src", POKE.opponentJsonData.sprites.back_default);
 			}else {
 				imgElement.setAttribute("src", POKE.opponentJsonData.sprites.front_default);
 			}
-			
-			
+
+
 		}
 	}, 500),
 	init : function(){
 		POKE.audio.battle.loop = true;
-//		POKE.audio.victory.loop = true;
 
 		document.getElementById("pokemonSubmit").addEventListener("click", POKE.getPokemon);
 		document.getElementById("pokemonSelectMoveBtn").addEventListener("click", POKE.selectPokemonMove);
@@ -417,14 +412,4 @@ var POKE = {
 POKE.init();
 
 
-
-
-
 } //end window.onload
-
-
-
-
-
-
-
